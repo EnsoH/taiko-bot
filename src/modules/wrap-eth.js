@@ -5,7 +5,7 @@ import { makeLogger } from '../utils/logger.js';
 import { WETH_CONTRACT_ADDRESS } from '../utils/contracts.js';
 import { checkBalance } from '../utils/web3-util.js';
 
-export async function depositWeth(client, amount) {
+export async function depositWeth(client, walletAddress, amount) {
   const logger = makeLogger('WETH_MODULE');
 
   try {

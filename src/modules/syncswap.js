@@ -2,7 +2,7 @@ import { sleep } from '../utils/common.js';
 import { makeLogger } from '../utils/logger.js';
 import { SYNCSWAP_CONTRACT_ADDRESS } from '../utils/contracts.js';
 import { syncswapAbi } from '../abis/syncswap-abi.js';
-import { syncswapClassicPoolAbi } from '../abis/syncswap-classic-pool-abi.js';
+// import { syncswapClassicPoolAbi } from '../abis/syncswap-classic-pool-abi.js';
 import { encodeAbiParameters, formatEther, parseEther } from 'viem';
 import { checkBalance, getMinAmount } from '../utils/web3-util.js';
 

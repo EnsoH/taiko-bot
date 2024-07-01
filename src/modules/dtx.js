@@ -2,7 +2,7 @@ import { sleep } from '../utils/common.js';
 import { makeLogger } from '../utils/logger.js';
 import { dtxAbi } from '../abis/dtx-abi.js';
 import { DTX_CONTRACT_ADDRESS } from '../utils/contracts.js';
-import { formatUnits, parseEther, formatEther } from 'viem';
+import { formatUnits, parseEther } from 'viem';
 import {
   checkAllowance,
   checkBalanceUsdc,
