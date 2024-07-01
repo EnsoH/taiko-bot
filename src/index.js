@@ -38,20 +38,20 @@ async function executeModule(client, walletAddress, module, logger) {
 }
 
 async function processWallet(client, walletAddress, logger) {
-  const modules = shuffle(SETTINGS.MODULES);
-
   if (SETTINGS.SHUFFLE_TX_COUNT) {
-    const txCounts = getRandomAmount(SETTINGS.SHUFFLE_TX_COUNT[0], SETTINGS.SHUFFLE_TX_COUNT[1]);
+    const txCounts = Math.round(getRandomAmount(SETTINGS.COUNT_TX[0], SETTINGS.COUNT_TX[1]));
 
     for (let i = 0; i < txCounts; i++) {
+      const modules = shuffle(SETTINGS.MODULES);
       for (const module of modules) {
         await executeModule(client, walletAddress, module, logger);
       }
     }
-  }
-
-  for (const module of modules) {
-    await executeModule(client, walletAddress, module, logger);
+  } else {
+    const modules = shuffle(SETTINGS.MODULES);
+    for (const module of modules) {
+      await executeModule(client, walletAddress, module, logger);
+    }
   }
 }
 
@@ -62,13 +62,14 @@ async function main() {
   const privateKeys = readFile('src/data/private-keys.txt');
 
   for (const privateKey of privateKeys) {
+    const key = privateKeyToAccount(privateKey)
+    const walletAddress = key.address
     const client = createWalletClient({
-      account: privateKeyToAccount(privateKey),
+      account: key,
       chain: taiko,
       transport: http(),
     }).extend(publicActions);
 
-    const walletAddress = privateKey.address;
     await processWallet(client, walletAddress, logger);
   }
 }

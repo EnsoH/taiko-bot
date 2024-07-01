@@ -24,7 +24,6 @@ import { checkBalance, getMinAmount } from '../utils/web3-util.js';
 export async function syncSwap(
   client,
   walletAddress,
-  fromToken,
   amount,
   slippage
 ) {
@@ -49,7 +48,7 @@ export async function syncSwap(
         { name: 'address', type: 'address' },
         { name: 'withdrawMode', type: 'uint8' },
       ],
-      [fromToken, walletAddress, withdrawMode]
+      ['0xA51894664A773981C6C112C43ce576f315d5b1B6', walletAddress, withdrawMode]
     );
 
     const steps = [
