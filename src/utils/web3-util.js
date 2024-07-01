@@ -10,9 +10,11 @@ export async function checkBalance(client, walletAddress) {
       address: walletAddress,
     });
     const balance = Number(formatEther(weiBalance));
+    const MIN_BALANCE_THRESHOLD = 1e-6; // Минимальный порог для баланса
 
-    if (balance <= 0) {
-      return logger.warn(`${walletAddress} no balance ${balance} ETH`);
+    if (balance <= MIN_BALANCE_THRESHOLD) {
+      logger.warn(`${walletAddress} no balance ${balance} ETH`);
+      return
     }
 
     return balance;
@@ -43,14 +45,12 @@ export async function getMinAmount(isEth, amountToSwap, slippage) {
 
 export async function checkBalanceUsdc(client, walletAddress) {
   try {
-    const balance = await client.readContract({
+    return await client.readContract({
       address: USDC_CONTRACT_ADDRESS,
       abi: stablecoinAbi,
       functionName: 'balanceOf',
       args: [walletAddress],
     });
-
-    return balance;
   } catch (err) {
     console.log(`Error when check balance USDC | ${err}`);
   }
@@ -58,20 +58,18 @@ export async function checkBalanceUsdc(client, walletAddress) {
 
 export async function checkAllowance(client, walletAddress, spender) {
   try {
-    const allowance = await client.readContract({
+    return await client.readContract({
       address: USDC_CONTRACT_ADDRESS,
       abi: stablecoinAbi,
       functionName: 'allowance',
       args: [walletAddress, spender],
     });
-
-    return allowance;
   } catch (err) {
     console.log(`Error when check allowance | ${err}`);
   }
 }
 
-export async function approve() {
+export async function approve(client, spender, amount) {
   const logger = makeLogger('APPROVE');
   try {
     const result = await client.writeContract({
