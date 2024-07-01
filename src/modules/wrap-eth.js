@@ -11,10 +11,6 @@ export async function depositWeth(client, walletAddress, amount) {
   try {
     await checkBalance(client, walletAddress);
 
-    console.log(amount)
-    console.log('fs')
-    console.log(parseEther(amount))
-
     const { request } = await client.simulateContract({
       address: WETH_CONTRACT_ADDRESS,
       abi: wethAbi,

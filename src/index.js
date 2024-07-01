@@ -56,6 +56,7 @@ async function processWallet(client, walletAddress, logger) {
 }
 
 async function main() {
+  // TODO: в массиве такса ленх 4 тогда новый рандом
   const logger = makeLogger('MAIN_MODULE');
   logger.silly('STARTING BOT ⚡⚡⚡\n');
 

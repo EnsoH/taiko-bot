@@ -79,8 +79,7 @@ async function dtxSwapUsdcEth(client, walletAddress, slippage) {
       await approve(client, DTX_CONTRACT_ADDRESS, amount);
       await sleep();
 
-      if (allowance >= amount) {
-        const { request } = await client.simulateContract({
+      const { request } = await client.simulateContract({
           address: DTX_CONTRACT_ADDRESS,
           abi: dtxAbi,
           functionName: 'swapExactTokensForETH',
@@ -104,7 +103,6 @@ async function dtxSwapUsdcEth(client, walletAddress, slippage) {
         );
         await sleep();
       }
-    }
   } catch (err) {
     logger.error(`Error when sending tx for swap | ${err}`);
   }
