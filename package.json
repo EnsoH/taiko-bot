@@ -1,0 +1,17 @@
+{
+  "name": "taiko-botv2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "tslog": "^4.9.3",
+    "viem": "^2.16.1"
+  }
+}
