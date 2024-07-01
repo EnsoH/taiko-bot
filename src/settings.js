@@ -1,4 +1,12 @@
-export const COUNT_TX = 150;
-export const SLEEP_TIME = [25, 55];
-export const AMOUNT_ETH = [0.0000001, 0.0000003];
-export const SLIPPAGE = 0.05;
+export const SETTINGS = {
+	COUNT_TX: [100, 150],
+	SHUFFLE_TX_COUNT: true,
+	SLEEP_TIME: [60, 120],
+	MODULES: ['dtx', 'syncswap', 'rubyscore', 'wrap-eth'],
+}
+
+export const SWAP_SETTINGS = {
+	WRAP_ETH_AMOUNT: [0.00000001, 0.0000003],
+	DEX_ETH_AMOUNT: [0.00000001, 0.0000003],
+	SLIPPAGE: 0.05,
+}
