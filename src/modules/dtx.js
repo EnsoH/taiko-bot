@@ -78,32 +78,32 @@ async function dtxSwapUsdcEth(client, walletAddress, slippage) {
     if (allowance < amount) {
       await approve(client, DTX_CONTRACT_ADDRESS, amount);
       await sleep();
-    }
 
-    if (allowance >= amount) {
-      const { request } = await client.simulateContract({
-        address: DTX_CONTRACT_ADDRESS,
-        abi: dtxAbi,
-        functionName: 'swapExactTokensForETH',
-        args: [
-          amount,
-          minAmount,
-          [
-            '0x07d83526730c7438048D55A4fc0b850e2aaB6f0b',
-            '0xA51894664A773981C6C112C43ce576f315d5b1B6',
+      if (allowance >= amount) {
+        const { request } = await client.simulateContract({
+          address: DTX_CONTRACT_ADDRESS,
+          abi: dtxAbi,
+          functionName: 'swapExactTokensForETH',
+          args: [
+            amount,
+            minAmount,
+            [
+              '0x07d83526730c7438048D55A4fc0b850e2aaB6f0b',
+              '0xA51894664A773981C6C112C43ce576f315d5b1B6',
+            ],
+            walletAddress,
+            deadline,
           ],
-          walletAddress,
-          deadline,
-        ],
-      });
-      const result = await client.writeContract(request);
-      logger.info(
-        `Swap ${formatUnits(amount, 6)} USDC -> ${formatUnits(
-          minAmount,
-          18
-        )} ETH | TX Send hash https://taikoscan.io/tx/${result}`
-      );
-      await sleep();
+        });
+        const result = await client.writeContract(request);
+        logger.info(
+            `Swap ${formatUnits(amount, 6)} USDC -> ${formatUnits(
+                minAmount,
+                18
+            )} ETH | TX Send hash https://taikoscan.io/tx/${result}`
+        );
+        await sleep();
+      }
     }
   } catch (err) {
     logger.error(`Error when sending tx for swap | ${err}`);

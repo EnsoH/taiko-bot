@@ -11,7 +11,8 @@ export function readFile(path) {
 }
 
 export function getRandomAmount(min, max) {
-  return Math.random() * (max - min) + min;
+  let randomNum = Math.random() * (max - min) + min;
+  return randomNum.toFixed(10)
 }
 
 function getRandomDelay(min, max) {
