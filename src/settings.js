@@ -2,7 +2,7 @@ export const SETTINGS = {
 	COUNT_TX: [100, 150],
 	SHUFFLE_TX_COUNT: true,
 	SLEEP_TIME: [60, 120],
-	MODULES: ['dtx', 'syncswap', 'rubyscore', 'wrap-eth'],
+	MODULES: ['dtx', 'rubyscore', 'wrap-eth'],
 }
 
 export const SWAP_SETTINGS = {

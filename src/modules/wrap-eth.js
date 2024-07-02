@@ -21,6 +21,34 @@ export async function depositWeth(client, walletAddress, amount) {
     const result = await client.writeContract(request);
     logger.info(`Tx send hash https://taikoscan.io/tx/${result}`);
     await sleep();
+
+    await withdraw(client, logger, walletAddress)
+
+    await sleep()
+  } catch (err) {
+    logger.error(`Error when sending tx for wrap eth | ${err}`);
+  }
+}
+
+export async function withdraw(client, logger, walletAddress) {
+  try {
+    const balanceWeth = await client.readContract({
+      address: WETH_CONTRACT_ADDRESS,
+      abi: wethAbi,
+      functionName: 'balanceOf',
+      args: [walletAddress]
+    })
+
+    const { request } = await client.simulateContract({
+      address: WETH_CONTRACT_ADDRESS,
+      abi: wethAbi,
+      functionName: 'withdraw',
+      args: [balanceWeth]
+    })
+
+    const result = await client.writeContract(request)
+    logger.info(`Tx send hash https://taikoscan.io/tx/${result}`);
+    await sleep();
   } catch (err) {
     logger.error(`Error when sending tx for wrap eth | ${err}`);
   }

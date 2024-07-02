@@ -5,10 +5,10 @@ import { getRandomAmount, readFile, shuffle } from './utils/common.js';
 import { makeLogger } from "./utils/logger.js";
 import { SETTINGS, SWAP_SETTINGS } from "./settings.js";
 import { dtxSwap } from "./modules/dtx.js";
-import { syncSwap } from "./modules/syncswap.js";
+// import { syncSwap } from "./modules/syncswap.js";
 import { rubyscoreVote } from "./modules/rubyscore.js";
 import { depositWeth } from "./modules/wrap-eth.js";
-import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from "./utils/contracts.js";
+// import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from "./utils/contracts.js";
 import { checkBalance } from "./utils/web3-util.js";
 
 
@@ -21,10 +21,10 @@ async function executeModule(client, walletAddress, module, logger) {
       case 'dtx':
         await dtxSwap(client, walletAddress, amount, slippage);
         break;
-      case 'syncswap':
-        await syncSwap(
-            client, walletAddress, WETH_CONTRACT_ADDRESS, USDC_CONTRACT_ADDRESS, amount, slippage);
-        break;
+      // case 'syncswap':
+      //   await syncSwap(
+      //       client, walletAddress, WETH_CONTRACT_ADDRESS, USDC_CONTRACT_ADDRESS, amount, slippage);
+      //   break;
       case 'rubyscore':
         await rubyscoreVote(client, walletAddress);
         break;
