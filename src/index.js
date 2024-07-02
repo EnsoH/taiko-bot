@@ -8,6 +8,8 @@ import { dtxSwap } from "./modules/dtx.js";
 import { syncSwap } from "./modules/syncswap.js";
 import { rubyscoreVote } from "./modules/rubyscore.js";
 import { depositWeth } from "./modules/wrap-eth.js";
+import { USDC_CONTRACT_ADDRESS, WETH_CONTRACT_ADDRESS } from "./utils/contracts.js";
+import { checkBalance } from "./utils/web3-util.js";
 
 
 async function executeModule(client, walletAddress, module, logger) {
@@ -20,7 +22,8 @@ async function executeModule(client, walletAddress, module, logger) {
         await dtxSwap(client, walletAddress, amount, slippage);
         break;
       case 'syncswap':
-        await syncSwap(client, walletAddress, amount, slippage);
+        await syncSwap(
+            client, walletAddress, WETH_CONTRACT_ADDRESS, USDC_CONTRACT_ADDRESS, amount, slippage);
         break;
       case 'rubyscore':
         await rubyscoreVote(client, walletAddress);
@@ -39,13 +42,24 @@ async function executeModule(client, walletAddress, module, logger) {
 
 async function processWallet(client, walletAddress, logger) {
   if (SETTINGS.SHUFFLE_TX_COUNT) {
+    let txCountBlockchain = await client.getTransactionCount({
+      address: walletAddress,
+    })
     const txCounts = Math.round(getRandomAmount(SETTINGS.COUNT_TX[0], SETTINGS.COUNT_TX[1]));
+    let finalTxCount = txCountBlockchain + txCounts
 
-    for (let i = 0; i < txCounts; i++) {
+    while (txCountBlockchain < finalTxCount) {
+      const isBalance = await checkBalance(client, walletAddress);
+      if (!isBalance) {
+        break
+      }
+
       const modules = shuffle(SETTINGS.MODULES);
       for (const module of modules) {
         await executeModule(client, walletAddress, module, logger);
       }
+
+      txCountBlockchain += 1
     }
   } else {
     const modules = shuffle(SETTINGS.MODULES);
@@ -56,7 +70,6 @@ async function processWallet(client, walletAddress, logger) {
 }
 
 async function main() {
-  // TODO: в массиве такса ленх 4 тогда новый рандом
   const logger = makeLogger('MAIN_MODULE');
   logger.silly('STARTING BOT ⚡⚡⚡\n');
 

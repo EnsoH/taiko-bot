@@ -46,7 +46,11 @@ export async function dtxSwap(client, walletAddress, amount, slippage) {
 
     await dtxSwapUsdcEth(client, walletAddress, slippage);
   } catch (err) {
-    logger.error(`Error when sending tx for swap | ${err}`);
+    if (err.name === 'ContractFunctionExecutionError') {
+      logger.error(`Not enough gas or eth for send tx for swap (check balance)`);
+    } else {
+      logger.error(`Error when sending tx for swap | ${err.name}`);
+    }
   }
 }
 

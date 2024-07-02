@@ -2,28 +2,28 @@ import { sleep } from '../utils/common.js';
 import { makeLogger } from '../utils/logger.js';
 import { SYNCSWAP_CONTRACT_ADDRESS } from '../utils/contracts.js';
 import { syncswapAbi } from '../abis/syncswap-abi.js';
-// import { syncswapClassicPoolAbi } from '../abis/syncswap-classic-pool-abi.js';
-import { encodeAbiParameters, formatEther, parseEther } from 'viem';
+import { syncswapClassicPoolAbi } from '../abis/syncswap-classic-pool-abi.js';
+import { encodeAbiParameters, parseEther } from 'viem';
 import { checkBalance, getMinAmount } from '../utils/web3-util.js';
 
-// async function pool(client, fromToken, toToken) {
-//   try {
-//     const poolAddress = await client.readContract({
-//       address: '0x608Cb7C3168427091F5994A45Baf12083964B4A3',
-//       abi: syncswapClassicPoolAbi,
-//       functionName: 'getPool',
-//       args: [fromToken, toToken],
-//     });
-
-//     return poolAddress;
-//   } catch (err) {
-//     console.log(`Error when fetching pool in syncswap | ${err}`);
-//   }
-// }
+async function pool(client, fromToken, toToken) {
+  try {
+    return await client.readContract({
+      address: '0x608Cb7C3168427091F5994A45Baf12083964B4A3',
+      abi: syncswapClassicPoolAbi,
+      functionName: 'getPool',
+      args: [fromToken, toToken],
+    });
+  } catch (err) {
+    console.log(`Error when fetching pool in syncswap | ${err}`);
+  }
+}
 
 export async function syncSwap(
   client,
   walletAddress,
+  fromToken,
+  toToken,
   amount,
   slippage
 ) {
@@ -31,7 +31,7 @@ export async function syncSwap(
   try {
     await checkBalance(client, walletAddress);
 
-    const poolAddress = '0x424Fab7bfA3E3Dd0e5BB96771fFAa72fe566200e';
+    const poolAddress = await pool(client, fromToken, toToken);
     const zeroAddress = '0x0000000000000000000000000000000000000000';
 
     if (poolAddress === zeroAddress) {
@@ -48,7 +48,7 @@ export async function syncSwap(
         { name: 'address', type: 'address' },
         { name: 'withdrawMode', type: 'uint8' },
       ],
-      ['0xA51894664A773981C6C112C43ce576f315d5b1B6', walletAddress, withdrawMode]
+      [fromToken, walletAddress, withdrawMode]
     );
 
     const steps = [

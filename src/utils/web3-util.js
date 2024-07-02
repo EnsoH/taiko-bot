@@ -9,12 +9,12 @@ export async function checkBalance(client, walletAddress) {
     const weiBalance = await client.getBalance({
       address: walletAddress,
     });
-    const balance = Number(formatEther(weiBalance));
+    const balance = Number(formatEther(weiBalance)).toFixed(10);
     const MIN_BALANCE_THRESHOLD = 1e-6; // Минимальный порог для баланса
 
     if (balance <= MIN_BALANCE_THRESHOLD) {
       logger.warn(`${walletAddress} no balance ${balance} ETH`);
-      return
+      return false
     }
 
     return balance;
